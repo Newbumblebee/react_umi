@@ -1,9 +1,9 @@
-import { DrawerFnCom } from '@/component/drawercomp/drawer_fn';
+import { DrawerDemoCom } from '@/component/drawercomp/drawer';
 
 export default function IndexPage() {
   return (
     <div style={{ height: 400 }}>
-      <DrawerFnCom />
+      <DrawerDemoCom />
     </div>
   );
 }

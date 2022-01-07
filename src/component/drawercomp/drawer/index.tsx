@@ -1,5 +1,6 @@
 import { Drawer, Button } from 'antd';
 import React, { Component } from 'react';
+import style from './index.less';
 
 export class DrawerDemoCom extends React.Component {
   state = {
@@ -20,24 +21,13 @@ export class DrawerDemoCom extends React.Component {
 
   render() {
     return (
-      <div className="site-drawer-render-in-current-wrapper">
+      <div className={style.site_drawer_render_in_current_wrapper}>
         Render in this
         <div style={{ marginTop: 16 }}>
           <Button type="primary" onClick={this.showDrawer}>
             Open
           </Button>
         </div>
-        <Drawer
-          title="Test Drawer"
-          placement="left"
-          closable={false}
-          onClose={this.onClose}
-          visible={this.state.visible}
-          getContainer={false}
-          style={{ position: 'absolute' }}
-        >
-          <p>Some contents...</p>
-        </Drawer>
         <Drawer
           title="Basic Drawer"
           placement="right"
