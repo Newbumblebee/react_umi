@@ -9,7 +9,10 @@ export default defineConfig({
   layout: {},
   routes: [
     //{ path: '/', component: '@/pages/index' },
-    { path: '/', component: '@/pages/ant/index' },
+    //{ path: '/', component: '@/pages/ant/index' },
+    //{ path: '/', component: '@/pages/demo0121/index' },
+    //{ path: '/', component: '@/pages/demo0121/advanceclock' },
+    { path: '/', component: '@/pages/demo0122/index' },
   ],
   fastRefresh: {},
 });
