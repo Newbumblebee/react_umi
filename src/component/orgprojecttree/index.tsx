@@ -1,178 +1,134 @@
-import React, { useState, useEffect } from 'react';
-import { Spin, Tree, message, Input } from 'antd';
-import { BankOutlined, FilePptTwoTone } from '@ant-design/icons';
-import { queryOrgProTree } from '../../services/project';
-import style from './index.css';
-const { Search } = Input;
+import React from 'react';
+import { Tree, Input } from 'antd';
 
-function handleTree(treeData) {
-  if (treeData && treeData.length > 0) {
-    const getChildren = (data) => {
-      data.map((item) => {
-        item.title = item.text;
-        item.key = item.id;
-        item.disabled = item.nodeType === 'ORG';
-        item.icon =
-          item.nodeType === 'ORG' ? <BankOutlined /> : <FilePptTwoTone />;
-        item.expanded = true;
-        item.children.map((element) => {
-          element.title = element.text;
-          element.key = element.id;
-          element.expanded = true;
-          element.disabled = element.nodeType === 'ORG';
-          element.icon =
-            element.nodeType === 'ORG' ? <BankOutlined /> : <FilePptTwoTone />;
-          getChildren(element.children);
-        });
-      });
-      return data;
-    };
-    treeData = getChildren(treeData);
-  }
-  return treeData;
-}
+const TreeNode = Tree.TreeNode;
+const Search = Input.Search;
 
-const loop = (searchValue, data) => {
-  let selectItem = [];
-  data.map((item) => {
-    if (item.title.indexOf(searchValue) > -1) {
-      selectItem = [...selectItem, item];
+const x = 5;
+const y = 2;
+const z = 2;
+const gData = [];
+
+const generateData = (_level, _preKey, _tns) => {
+  const preKey = _preKey || '0';
+  const tns = _tns || gData;
+
+  const children = [];
+  for (let i = 0; i < x; i++) {
+    const key = `${preKey}-${i}`;
+    tns.push({ title: key, key });
+    if (i < y) {
+      children.push(key);
     }
-    if (item.children) {
-      var children = loop(searchValue, item.children);
-      if (children.length > 0) {
-        selectItem = [...selectItem, ...children];
+  }
+  if (_level < 0) {
+    return tns;
+  }
+  const level = _level - 1;
+  children.forEach((key, index) => {
+    tns[index].children = [];
+    return generateData(level, key, tns[index].children);
+  });
+};
+generateData(z);
+
+const dataList = [];
+const generateList = (data) => {
+  for (let i = 0; i < data.length; i++) {
+    const node = data[i];
+    const key = node.key;
+    dataList.push({ key, title: key });
+    if (node.children) {
+      generateList(node.children, node.key);
+    }
+  }
+};
+generateList(gData);
+
+const getParentKey = (key, tree) => {
+  let parentKey;
+  for (let i = 0; i < tree.length; i++) {
+    const node = tree[i];
+    if (node.children) {
+      if (node.children.some((item) => item.key === key)) {
+        parentKey = node.key;
+      } else if (getParentKey(key, node.children)) {
+        parentKey = getParentKey(key, node.children);
       }
     }
-  });
-  return selectItem;
+  }
+  return parentKey;
 };
 
-export default function OrgProjectTree(props) {
-  const { onSelect } = props;
-
-  const [tkeyword, setTkeyword] = useState(''); //关键词
-  //查询关键字
-  const [searchValue, setSearchValue] = useState('');
-  //选中的key数组
-  const [selectedKeys, setSelectedKeys] = useState([]);
-  //查询到的所有key
-  const [allSelectedKeys, setAllSelectedKeys] = useState([]);
-  //索引
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  //树数据
-  const [orgProTreeData, setOrgProTreeData] = useState({
-    data: [],
-    loading: true,
-  });
-
-  //树节点选中事件
-  const handleSelect = (selectedKeys, e) => {
-    setSelectedKeys(selectedKeys);
-    onSelect && onSelect(e.PhId || e.node.PhId);
+export default class SearchTree extends React.Component {
+  state = {
+    expandedKeys: [],
+    searchValue: '',
+    autoExpandParent: true,
   };
-
-  useEffect(() => {
-    //查询组织项目树
-    queryOrgProTree().then((res) => {
-      let treeData = handleTree(res);
-      setOrgProTreeData({
-        loading: false,
-        data: treeData,
-      });
+  onExpand = (expandedKeys) => {
+    this.setState({
+      expandedKeys,
+      autoExpandParent: false,
     });
-  }, []);
-
-  const searchTreeData = (params) => {
-    const { keyword } = params;
-
-    if (!keyword || keyword == '') return;
-
-    let selectItemNode;
-
-    if (searchValue == '' || keyword != searchValue) {
-      const selectItems = loop(keyword, orgProTreeData.data);
-
-      selectItemNode =
-        selectItems.length > 0 ? selectItems.slice(0, 1)[0] : undefined;
-      //选中搜索后的第一个
-      setSearchValue(keyword);
-      setSelectedKeys([selectItemNode?.key]);
-      setAllSelectedKeys(selectItems);
-      setSelectedIndex(0);
-    } else {
-      let index = selectedIndex + 1;
-      if (allSelectedKeys.length > index) {
-        selectItemNode = allSelectedKeys.slice(index, index + 1)[0];
-        setSelectedKeys([selectItemNode?.key]);
-        setSelectedIndex(index);
-      } else {
-        selectItemNode =
-          allSelectedKeys.length > 0
-            ? allSelectedKeys.slice(0, 1)[0]
-            : undefined;
-        setSelectedKeys([selectItemNode?.key]);
-        setSelectedIndex(0);
-      }
-    }
-
-    if (!selectItemNode) {
-      messageAlter();
-      selectItemNode = { PhId: 1 };
-    }
-
-    handleSelect([selectItemNode?.key], selectItemNode);
   };
-
-  const messageAlter = () => {
-    message.warning(langType.cannotfindnode);
+  onChange = (e) => {
+    const value = e.target.value;
+    const expandedKeys = dataList
+      .map((item) => {
+        if (item.key.indexOf(value) > -1) {
+          return getParentKey(item.key, gData);
+        }
+        return null;
+      })
+      .filter((item, i, self) => item && self.indexOf(item) === i);
+    this.setState({
+      expandedKeys,
+      searchValue: value,
+      autoExpandParent: true,
+    });
   };
-
-  const keywordSearch = () => {
-    const params = {
-      keyword: tkeyword,
-    };
-    searchTreeData(params);
-  };
-
-  //关键词搜索输入框
-  const handleInputChange = (event) => {
-    setTkeyword(event.target.value);
-  };
-
-  const clearSelected = () => {
-    setAllSelectedKeys([]);
-    setSelectedIndex(0);
-    setSelectedKeys([]);
-    setTkeyword('');
-  };
-
-  return (
-    <div>
-      <Search
-        width={160}
-        onSearch={keywordSearch}
-        defaultValue={tkeyword}
-        onChange={handleInputChange}
-      />
-
-      <Spin
-        wrapperClassName={'spin-loading'}
-        spinning={orgProTreeData.loading}
-        className={style.pageLoading}
-      >
-        <div className={style.tree_div}>
-          {orgProTreeData.data.length > 0 && (
-            <Tree
-              showIcon
-              selectedKeys={selectedKeys}
-              defaultExpandAll={true}
-              treeData={orgProTreeData.data}
-              onSelect={handleSelect}
-            />
-          )}
-        </div>
-      </Spin>
-    </div>
-  );
+  render() {
+    const { searchValue, expandedKeys, autoExpandParent } = this.state;
+    const loop = (data) =>
+      data.map((item) => {
+        const index = item.key.indexOf(searchValue);
+        const beforeStr = item.key.substr(0, index);
+        const afterStr = item.key.substr(index + searchValue.length);
+        const title =
+          index > -1 ? (
+            <span>
+              {beforeStr}
+              <span style={{ color: '#f50' }}>{searchValue}</span>
+              {afterStr}
+            </span>
+          ) : (
+            <span>{item.key}</span>
+          );
+        if (item.children) {
+          return (
+            <TreeNode key={item.key} title={title}>
+              {loop(item.children)}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.key} title={title} />;
+      });
+    return (
+      <div>
+        <Search
+          style={{ marginBottom: 8 }}
+          placeholder="Search"
+          onChange={this.onChange}
+        />
+        <Tree
+          onExpand={this.onExpand}
+          expandedKeys={expandedKeys}
+          autoExpandParent={autoExpandParent}
+        >
+          {loop(gData)}
+        </Tree>
+      </div>
+    );
+  }
 }
