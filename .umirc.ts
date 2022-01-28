@@ -12,7 +12,8 @@ export default defineConfig({
     //{ path: '/', component: '@/pages/ant/index' },
     //{ path: '/', component: '@/pages/demo0121/index' },
     //{ path: '/', component: '@/pages/demo0121/advanceclock' },
-    { path: '/', component: '@/pages/demo0122/index' },
+    // { path: '/', component: '@/pages/demo0122/index' },
+    { path: '/', component: '@/pages/ant/tree/treefour' },
   ],
   fastRefresh: {},
 });
