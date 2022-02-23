@@ -1,0 +1,21 @@
+.tree_div {
+  width: 220px;
+  /* min-width: 100%; */
+  height: 490px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.tree_div :global(.ant-tree-title) {
+  white-space: nowrap;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:global(.ant-tree-node-content-wrapper) {
+  white-space: nowrap;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
