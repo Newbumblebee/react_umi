@@ -5,6 +5,6 @@ export default defineConfig({
     type: 'none',
   },
   layout: {},
-  routes: [{ path: '/', component: '@/pages/index' }],
+  //routes: [{ path: '/', component: '@/pages/demo/index' }],
   fastRefresh: {},
 });
