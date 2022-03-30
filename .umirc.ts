@@ -1,3 +1,5 @@
+//配置文件，包含 umi 内置功能和插件的配置。
+
 import { defineConfig } from 'umi';
 
 export default defineConfig({
@@ -6,5 +8,14 @@ export default defineConfig({
   },
   layout: {},
   //routes: [{ path: '/', component: '@/pages/demo/index' }],
+  //routes: [{ path: '/', component: '@/pages/drawerDemo' }],
+  routes: [
+    //{ path: '/', component: '@/pages/index' },
+    //{ path: '/', component: '@/pages/ant/index' },
+    //{ path: '/', component: '@/pages/demo0121/index' },
+    //{ path: '/', component: '@/pages/demo0121/advanceclock' },
+    // { path: '/', component: '@/pages/demo0122/index' },
+    { path: '/', component: '@/pages/ant/tree/treefour' },
+  ],
   fastRefresh: {},
 });

@@ -3,8 +3,7 @@
 # dependencies
 /node_modules
 /npm-debug.log*
-/yarn-error.log
-/yarn.lock
+yarn-error.log
 /package-lock.json
 
 # production
@@ -18,3 +17,7 @@
 /src/.umi-production
 /src/.umi-test
 /.env.local
+
+/.vscode
+
+yarn.lock
