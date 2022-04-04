@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import _ from 'lodash';
-import { useSearchParam } from 'react-use';
+import { useEvent, useSearchParam } from 'react-use';
+import { message } from 'antd';
 
 export function SearchBox({ data }) {
   const searchKey = useSearchParam('key') || '';
@@ -18,6 +19,10 @@ export function SearchBox({ data }) {
       `${window.location.pathname}?key=${evt.target.value}`,
     );
   }, 3000);
+
+  useEvent('keydown', (e) => {
+    message.info(e);
+  });
 
   return (
     <div className="08-filter-list">
