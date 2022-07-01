@@ -24,36 +24,9 @@ export default function TestPage() {
     },
   ];
 
-  const handleClick = (e) => {
-    console.log(e);
-
+  const handleClick = () => {
     const byName = _.keyBy(data, 'name');
-
-    // {
-    //   "Kennedy":
-    //   {
-    //     "id": "1",
-    //     "name": "Kennedy",
-    //     "job": "Chief Mobility Orchestrator",
-    //     "city": "North Alec"
-    //   },
-    //   "Lucius":
-    //   {
-    //     "id": "2",
-    //     "name": "Lucius",
-    //     "job": "Internal Research Manager",
-    //     "city": "Littleland"
-    //   },
-    //   "Carlos":
-    //   {
-    //     "id": "3",
-    //     "name": "Carlos",
-    //     "job": "Lead Configuration Analyst",
-    //     "city": "South Lillian"
-    //   }
-    // }
-
-    console.log('byName', byName);
+    console.log('keyBy', byName);
   };
 
   return (
