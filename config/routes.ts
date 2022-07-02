@@ -28,7 +28,7 @@ export default [
       {
         path: '/table',
         // exact: true,//父路由不能设置改属性
-        name: '表格',
+        name: 'table表格',
         routes: [
           {
             path: '/table/simple',
@@ -54,6 +54,37 @@ export default [
             exact: true,
             name: 'Debounce',
             component: '@/pages/lodash/Debounce',
+          },
+        ],
+      },
+      {
+        path: '/tree',
+        // exact: true, //父路由不能设置改属性
+        name: 'tree树',
+        routes: [
+          {
+            path: '/tree/treeone',
+            exact: true,
+            name: '树一',
+            component: '@/pages/tree/treeone',
+          },
+          {
+            path: '/tree/treetwo',
+            exact: true,
+            name: '树二',
+            component: '@/pages/tree/treetwo',
+          },
+          {
+            path: '/tree/treethree',
+            exact: true,
+            name: '树三',
+            component: '@/pages/tree/treethree',
+          },
+          {
+            path: '/tree/treefour',
+            exact: true,
+            name: '树四',
+            component: '@/pages/tree/treefour',
           },
         ],
       },
