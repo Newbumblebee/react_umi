@@ -12,9 +12,10 @@ export default [
       },
       {
         name: '表格',
+        path: '/table',
         routes: [
           {
-            path: '/simple',
+            path: '/table/simple',
             name: '简单表格',
             component: '@/pages/table/simpletable/SimpleTable',
           },
@@ -22,16 +23,33 @@ export default [
       },
       {
         name: 'lodash 示例',
+        path: '/lodash',
         routes: [
           {
-            path: '/keyBy',
+            path: '/lodash/keyBy',
             name: 'KeyBy',
             component: '@/pages/lodash/KeyBy',
           },
           {
-            path: '/Debounce',
+            path: '/lodash/Debounce',
             name: 'Debounce',
             component: '@/pages/lodash/Debounce',
+          },
+        ],
+      },
+      {
+        name: 'useRef 示例',
+        path: '/useref',
+        routes: [
+          {
+            path: '/useref/TextInputWithFocusButton',
+            name: 'TextInputWithFocusButton',
+            component: '@/pages/useref/TextInputWithFocusButton',
+          },
+          {
+            path: '/useref/FancyInput',
+            name: 'DebouFancyInputnce',
+            component: '@/pages/useref/FancyInput',
           },
         ],
       },
