@@ -40,7 +40,6 @@ export default [
         path: '/lodash',
         // exact: true, //父路由不能设置改属性
         name: 'lodash 示例',
-        path: '/lodash',
         routes: [
           {
             path: '/lodash/keyBy',
