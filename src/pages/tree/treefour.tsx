@@ -16,8 +16,8 @@ const initTreeData = [
   },
 ]; // It's just a simple demo. You can use tree map to optimize update perf.
 
-function updateTreeData(list, key, children) {
-  return list.map((node) => {
+function updateTreeData(list: any, key: any, children: any) {
+  return list.map((node: any) => {
     if (node.key === key) {
       return { ...node, children };
     }
